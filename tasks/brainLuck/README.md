@@ -19,4 +19,4 @@ The function will take in input...
 
     the output of the interpreted code (always as a string), produced by the '.' instruction
 
-See page here: [My smallest code interpreter (aka Brainf**k)](http://www.codewars.com/dojo/katas/526156943dfe7ce06200063e/play/javascript)
+See complete description here: [My smallest code interpreter (aka Brainf**k)](http://www.codewars.com/dojo/katas/526156943dfe7ce06200063e/play/javascript)
