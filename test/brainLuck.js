@@ -4,8 +4,8 @@ var brainLuck = require("../lib/brainLuck");
 // Echo until byte(255) encountred
 Test.assertEquals(brainLuck(',+[-.,+]','Codewars' + String.fromCharCode(255)), 'Codewars');
 
-// // Echo until byte(0) encountred
+// Echo until byte(0) encountred
 Test.assertEquals(brainLuck(',[.[-],]','Codewars'), 'Codewars');
 
-// // Two numbers multiplier
-// Test.assertEquals(brainLuck(',>,<[>[->+>+<<]>>[-<<+>>]<<<-]>>.', String.fromCharCode(8,9)), String.fromCharCode(72));
+// Two numbers multiplier
+Test.assertEquals(brainLuck(',>,<[>[->+>+<<]>>[-<<+>>]<<<-]>>.', String.fromCharCode(8,9)), String.fromCharCode(72));
