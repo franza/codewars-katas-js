@@ -52,16 +52,26 @@ BinaryTreeNode.prototype.postorder = function(fn) {
 BinaryTreeNode.prototype.contains = function(x) {
   return this.value === x || (x < this.value ? this.left : this.right).contains(x);
 };
-BinaryTreeNode.prototype.insert = function(x) {
-  x < this.value ? this.left.insert(x) : this.right.insert(x);
-  return this;
+BinaryTreeNode.prototype.insert = function (x) {
+  if (x < this.value)
+    return new BinaryTreeNode(this.value, this.left.insert(x), this.right);
+  return new BinaryTreeNode(this.value, this.left, this.right.insert(x));
 };
-BinaryTreeNode.prototype.remove = function(x) {
-  if (this.value === x) return new EmptyBinaryTree();
-  x < this.value ? this.left.remove(x) : this.right.remove(x);
-  return this;
+BinaryTreeNode.prototype.remove = function (x) {
+  if (!this.contains(x)) return this;
+  if (this.value === x) {
+    var merged = this.left;
+    this.right.inorder(function(x) { merged = merged.insert(x); });
+    console.log(merged.toString());
+    return merged;
+  }
+  if (x < this.value)
+    return new BinaryTreeNode(this.value, this.left.remove(x), this.right);
+  return new BinaryTreeNode(this.value, this.left, this.right.remove(x));
 };
-
+BinaryTreeNode.prototype.toString = function () {
+  return '[ ' + [this.value, this.left, this.right].join(' ') + ' ]';
+};
 exports.BinaryTree = BinaryTree;
 exports.BinaryTreeNode = BinaryTreeNode;
 exports.EmptyBinaryTree = EmptyBinaryTree;
