@@ -63,27 +63,27 @@ function BefungeProgram(code) {
     else if (instruction >= '0' && '9' >= instruction)
       stack.push(instruction);
     else if (instruction == '+')
-      stack.push(stack.pop() + stack.pop());
+      stack.push(+stack.pop() + +stack.pop());
     else if (instruction == '-')
-      stack.push(-stack.pop() + stack.pop());
+      stack.push(-stack.pop() + +stack.pop());
     else if (instruction == '*')
-      stack.push(stack.pop() * stack.pop());
+      stack.push(+stack.pop() * +stack.pop());
     else if (instruction == '/')
-      !(a = stack.pop()) ? a : Math.ceil(stack.pop() / a);
+      stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() / a));
     else if (instruction == '%')
-      !(a = stack.pop()) ? a : Math.ceil(stack.pop() % a);
+      stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() % a));
     else if (instruction == '!')
-      !stack.pop() ? 1 : 0;
+      stack.push(+(stack.pop() == 0));
     else if (instruction == '`')
-      stack.pop() >= stack.pop() ? 0 : 1;
+      stack.push(stack.pop() >= stack.pop() ? 0 : 1);
     else if (~'<>^v'.indexOf(instruction))
       direction = instruction;
     else if (instruction == '?')
-      this.runInstruction('<>v^'[~~(Math.random() * 5)]);
+      processInstruction('<>v^'[~~(Math.random() * 5)]);
     else if (instruction == '_')
-      direction = stack.pop() ? '<' : '>';
+      direction = +stack.pop() ? '<' : '>';
     else if (instruction == '|')
-      direction = stack.pop() ? '^' : 'v';
+      direction = +stack.pop() ? '^' : 'v';
     else if (instruction == ':')
       (a = stack.pop()) === undefined ? stack.push(0) : (stack.push(a), stack.push(a));
     else if (instruction == '.')
@@ -93,7 +93,7 @@ function BefungeProgram(code) {
     else if (instruction == '#')
       nextMove();
     else if (instruction == '\\')
-      a = stack.pop(), b = stack.pop(), stack.push(b || 0), stack.push(a);
+      a = stack.pop(), b = stack.pop(), stack.push(a || 0), stack.push(b);
     else if (instruction == '$')
       stack.pop();
     else if (instruction == 'p')
