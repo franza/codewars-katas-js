@@ -120,4 +120,4 @@ function BefungeProgram(code) {
 
 BefungeProgram.prototype.constructor = BefungeProgram;
 
-exports.interpret = interpret;
+module.exports = interpret;
