@@ -9,11 +9,11 @@ function BefungeProgram(code) {
   var instructions = code.split('\n').map(function (line) { return line.split(''); });
   instructions.get = function () {
     var args = arguments[0] instanceof Array ? arguments[0] : arguments;
-    return this[args[0]][args[1]];
+    return this[args[1]][args[0]];
   };
   instructions.set = function () {
     var args = arguments[0] instanceof Array ? arguments[0] : arguments;
-    this[args[0]][args[1]] = arguments.length - 1;
+    this[args[1]][args[0]] = arguments.length - 1;
   };
   
   var stack = [];
