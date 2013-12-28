@@ -1,6 +1,6 @@
 function interpret(code) {
   var program = new BefungeProgram(code);
-  while (!program.isRunning)
+  while (program.isRunning)
     program.runNextInstruction();
   return program.output;
 }
@@ -32,7 +32,7 @@ function BefungeProgram(code) {
   addProperty('output', function () { return output; });
   addProperty('isRunning', function () {
     var current = instructions.get(codePointer);
-    return current != '@' && !current;
+    return current != '@' || !current;
   });
   
   function nextMove() {
@@ -54,10 +54,11 @@ function BefungeProgram(code) {
   
   function processInstruction(instruction) {
     var a, b;
-    if (asciiMode) {
-      stack.push(instruction.charCodeAt(0));
-      return nextMove();
-    } else if (instruction == '@')
+    if (instruction == '"')
+      return asciiMode = !asciiMode, undefined;
+    if (asciiMode)
+      return stack.push(instruction.charCodeAt(0));
+    else if (instruction == '@')
       return;
     else if (instruction >= '0' && '9' >= instruction)
       stack.push(instruction);
@@ -77,26 +78,18 @@ function BefungeProgram(code) {
       stack.pop() >= stack.pop() ? 0 : 1;
     else if (~'<>^v'.indexOf(instruction))
       direction = instruction;
-    else if (instruction == '>')
-      codePointer[0] += 1;
-    else if (instruction == 'v')
-      codePointer[1] += 1;
-    else if (instruction == '^')
-      codePointer[1] -= 1;
     else if (instruction == '?')
       this.runInstruction('<>v^'[~~(Math.random() * 5)]);
     else if (instruction == '_')
       direction = stack.pop() ? '<' : '>';
     else if (instruction == '|')
       direction = stack.pop() ? '^' : 'v';
-    else if (instruction == '"')
-      asciiMode = !asciiMode;
     else if (instruction == ':')
       (a = stack.pop()) === undefined ? stack.push(0) : (stack.push(a), stack.push(a));
     else if (instruction == '.')
       output += stack.pop();
     else if (instruction == ',')
-      output += stack.pop().charCodeAt(0);
+      output += String.fromCharCode(stack.pop());
     else if (instruction == '#')
       nextMove();
     else if (instruction == '\\')
