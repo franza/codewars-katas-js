@@ -13,7 +13,7 @@ function BefungeProgram(code) {
   };
   instructions.set = function () {
     var args = arguments[0] instanceof Array ? arguments[0] : arguments;
-    this[args[1]][args[0]] = arguments.length - 1;
+    this[args[1]][args[0]] = args[args.length - 1];
   };
   
   var stack = [];
@@ -58,50 +58,52 @@ function BefungeProgram(code) {
       return asciiMode = !asciiMode, undefined;
     if (asciiMode)
       return stack.push(instruction.charCodeAt(0));
-    else if (instruction == '@')
+    if (instruction == '@')
       return;
-    else if (instruction >= '0' && '9' >= instruction)
-      stack.push(instruction);
-    else if (instruction == '+')
-      stack.push(+stack.pop() + +stack.pop());
-    else if (instruction == '-')
-      stack.push(-stack.pop() + +stack.pop());
-    else if (instruction == '*')
-      stack.push(+stack.pop() * +stack.pop());
-    else if (instruction == '/')
-      stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() / a));
-    else if (instruction == '%')
-      stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() % a));
-    else if (instruction == '!')
-      stack.push(+(stack.pop() == 0));
-    else if (instruction == '`')
-      stack.push(stack.pop() >= stack.pop() ? 0 : 1);
-    else if (~'<>^v'.indexOf(instruction))
-      direction = instruction;
-    else if (instruction == '?')
-      processInstruction('<>v^'[~~(Math.random() * 5)]);
-    else if (instruction == '_')
-      direction = +stack.pop() ? '<' : '>';
-    else if (instruction == '|')
-      direction = +stack.pop() ? '^' : 'v';
-    else if (instruction == ':')
-      (a = stack.pop()) === undefined ? stack.push(0) : (stack.push(a), stack.push(a));
-    else if (instruction == '.')
-      output += stack.pop();
-    else if (instruction == ',')
-      output += String.fromCharCode(stack.pop());
-    else if (instruction == '#')
-      nextMove();
-    else if (instruction == '\\')
-      a = stack.pop(), b = stack.pop(), stack.push(a || 0), stack.push(b);
-    else if (instruction == '$')
-      stack.pop();
-    else if (instruction == 'p')
-      b = stack.pop(), a = stack.pop(), instructions.set(a, b, stack.pop().fromCharCode());
-    else if (instruction == 'g')
-      b = stack.pop(), a = stack.pop(), stack.push(instructions.get(a, b).charCodeAt(0));
-    else if (instruction == ' ') ;
-    else throw 'Unsupported instruction: ' + instruction;
+    if (instruction >= '0' && '9' >= instruction)
+      return stack.push(instruction);
+    if (instruction == '+')
+      return stack.push(+stack.pop() + +stack.pop());
+    if (instruction == '-')
+      return stack.push(-stack.pop() + +stack.pop());
+    if (instruction == '*')
+      return stack.push(+stack.pop() * +stack.pop());
+    if (instruction == '/')
+      return stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() / a));
+    if (instruction == '%')
+      return stack.push(!(a = +stack.pop()) ? a : Math.ceil(+stack.pop() % a));
+    if (instruction == '!')
+      return stack.push(+(stack.pop() == 0));
+    if (instruction == '`')
+      return stack.push(stack.pop() >= stack.pop() ? 0 : 1);
+    if (~'<>^v'.indexOf(instruction))
+      return direction = instruction, undefined;
+    if (instruction == '?')
+      return processInstruction('<>v^'[~~(Math.random() * 4)]);
+    if (instruction == '_')
+      return direction = +stack.pop() ? '<' : '>', undefined;
+    if (instruction == '|')
+      return direction = +stack.pop() ? '^' : 'v', undefined;
+    if (instruction == ':')
+      return (a = stack.pop()) === undefined ? stack.push(0) : (stack.push(a), stack.push(a));
+    if (instruction == '.')
+      return output += stack.pop();
+    if (instruction == ',')
+      return output += String.fromCharCode(stack.pop());
+    if (instruction == '#')
+      return nextMove();
+    if (instruction == '\\')
+      return a = stack.pop(), b = stack.pop(), stack.push(a || 0), stack.push(b);
+    if (instruction == '$')
+      return stack.pop();
+    if (instruction == 'p')
+      return b = stack.pop(), a = stack.pop(), instructions.set(a, b, String.fromCharCode(stack.pop()).toString());
+    if (instruction == 'g')
+      return b = stack.pop(), a = stack.pop(), stack.push(instructions.get(a, b).charCodeAt(0));
+    if (instruction == ' ') 
+      return;
+    
+    throw 'Unsupported instruction: ' + instruction;
   }
   
   this.runNextInstruction = function () {
