@@ -27,3 +27,5 @@ the determinant is: `a * det(a_minor) - b * det(b_minor) + c * det(c_minor)` whe
 Note the alternation of signs.
 
 The determinant of larger matrices are calculated analogously, e.g. if M is a 4x4 matrix with first row `[a, b, c, d]`, `det(M) = a * det(a_minor) - b * det(b_minor) + c * det(c_minor) - d * det(d_minor)`
+
+See more at [Matrix Determinant](http://www.codewars.com/dojo/katas/52a382ee44408cea2500074c/play/javascript)
