@@ -8,6 +8,7 @@ Array.prototype.каждая = Array.prototype.every;
 Array.prototype.взятьИндекс = Array.prototype.indexOf;
 Array.prototype.соеденить = Array.prototype.join;
 Array.prototype.наоборот = Array.prototype.reverse;
+Array.prototype.длина = Array.prototype.length;
 Object.prototype.toString = Object.prototype.кСтроке;
 Number.prototype.значение = Number.prototype.valueOf;
 String.prototype.разделить = String.prototype.split;
