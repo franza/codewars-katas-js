@@ -45,7 +45,7 @@ function ascendingSecuence(number) {
   return ascSequence.indexOf(digits) != -1;
 }
 
-var descSequence = '0123456789';
+var descSequence = '9876543210';
 
 function descendingSequence(number) {
   var digits = number.toString();
