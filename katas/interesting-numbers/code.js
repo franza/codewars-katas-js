@@ -61,7 +61,9 @@ function oneOf(number, array) {
   return array.indexOf(number) != -1;
 }
 
-Number.prototype.is = Number.prototype.are = Number.prototype.has = Number.prototype.have = function (predicate, args) {
+var numberProto = Number.prototype;
+
+numberProto.is = numberProto.are = numberProto.has = numberProto.have = function (predicate, args) {
   var args = [ this.valueOf() ].concat(Array.prototype.slice.call(arguments, 1));
   return new DslPredicateWrapper(this.valueOf(), predicate.apply(null, args));
 };
