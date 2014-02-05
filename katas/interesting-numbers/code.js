@@ -8,7 +8,7 @@ function isInteresting(number, awesomePhrases) {
     return 2;
   }
 
-  isInteresting = [number + 1, number + 2].some(function (number) {
+  var isInteresting = [number + 1, number + 2].some(function (number) {
     return number.has(properLength).andIs(interesting).really();
   });
 
