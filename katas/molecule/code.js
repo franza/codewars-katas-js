@@ -1,26 +1,22 @@
-var brackets = {
-  '[': ']',
-  '{': '}',
-  '(': ')' 
-};
+var brackets = { '[': ']', '{': '}', '(': ')' };
 
 var lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz';
 var upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-function handleAtom(symbol, count, multiplier, resultObject) {
+function handleAtom(symbol, count, multiplier) {
   var result = { };
   result[symbol] = count * multiplier;
+  console.log(result);
   return result;
 }
 
 function handleOpenBracket(index, string) {
-  var bracket = string[index];
+  var openingBracket = string[index];
   var openedBrackets = 1;
-  var closingBracket = brackets[bracket];
-  var result = '';
+  var closingBracket = brackets[openingBracket];
 
-  for (var i = index + 1; openedBrackets; i++) {
-    if (string[i] == bracket) {
+  for (var i = index + 1, result = ''; openedBrackets; i++) {
+    if (string[i] == openingBracket) {
       openedBrackets += 1;
       continue;
     }
@@ -33,12 +29,10 @@ function handleOpenBracket(index, string) {
     result += string[i];
   };
 
-  var multiplier = string[i];
-  // console.log(result, multiplier, string, i);
-  return [result, multiplier];
+  return [result, string[i] | 0];
 }
 
-function getSymbol(index, string) {
+function getAtomSign(index, string) {
   var result = string[index];
   for (var i = index + 1; lowerCaseLetters.indexOf(string[i]) != -1; i++) {
     result += string[i];
@@ -46,40 +40,39 @@ function getSymbol(index, string) {
   return result;
 }
 
-function sumFields(object, into) {
-  // console.log(object, into);
-  Object.keys(object).map(function (key) {
-    into[key] = (into[key] | 0) + object[key];
-  });
+function getAtomCount(index, string) {
+  var result = string[index];
+  if (isNaN(result)) {
+    return 1;
+  }
+
+  for (var i = index + 1; !isNaN(string[i]); i++) {
+    result += string[i];
+  }
+  return result;
 }
 
-"K4[ON(SO3)2]2"
+function sumFields(object, into) {
+  Object.keys(object).map(function (key) { into[key] = (into[key] | 0) + object[key]; });
+}
 
 function parseMolecule(formula, multiplier) {
   multiplier = multiplier || 1;
   for (var index = 0, result = { }, symbol = formula[index]; index < formula.length; index++, symbol = formula[index]) {
+
     if (symbol in brackets) {
       var res = handleOpenBracket(index, formula), innerFormula = res[0], innerMultiplier = res[1];
-      var innerParsed = parseMolecule(innerFormula, innerMultiplier);
-      console.log(innerFormula, innerParsed);
-      sumFields(innerParsed, result);
-      index += formula.length + 1;
+      sumFields(parseMolecule(innerFormula, innerMultiplier * multiplier), result);
+      index += innerFormula.length + 1;
       continue;
     }
 
     if (upperCaseLetters.indexOf(symbol) != -1) {
-      // console.log(symbol, ' - letter', index)
-      symbol = getSymbol(index, formula);
-      var possibleCount = formula[index + symbol.length] | 0, count = possibleCount || 1;
-      var res = handleAtom(symbol, count, multiplier, result);
-      sumFields(res, result);
+      var sign = getAtomSign(index, formula);
+      sumFields(handleAtom(sign, getAtomCount(index + sign.length, formula), multiplier), result);
       continue;
     }
-
-    // console.log(symbol, ' - something else')
-    continue;
   }
-  console.log(formula, multiplier, result);
   return result;
 }
 
