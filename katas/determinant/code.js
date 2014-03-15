@@ -4,11 +4,9 @@ function determinant(m) {
   }
   
   return m[0].reduce(function (acc, x, col) {
-    var koef = col & 1 ? -1 : 1,
-      minorDet = determinant(minor(m, { i: 0, j: col }));
-    return acc + koef * x * minorDet;
+    return acc + ( col & 1 ? -1 : 1 ) * x * determinant( minor(m, { i: 0, j: col }) );
   }, 0);
-};
+}
 
 function minor(m, idxs) {
   
