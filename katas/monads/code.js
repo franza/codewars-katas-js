@@ -23,7 +23,10 @@ Maybe.unit = function (x) {
 
 Maybe.bind = function (f) {
   return function (maybe) {
-    return maybe instanceof Nothing ? new Nothing() : f(maybe.just);
+    if (maybe instanceof Maybe) {
+      return maybe instanceof Nothing ? new Nothing() : f(maybe.just);
+    }
+    throw new Error('Argument is not a monad');
   };
 };
 
@@ -39,8 +42,9 @@ Maybe.lift = function (f) {
 
 Maybe.do = function(m) {
   var fns = Array.prototype.slice.call(arguments, 1);
-  return fns.reduce(function (m, fn) {
-    return m instanceof Nothing ? new Nothing() : fn(m.just);
+  return fns.reduce(function(monad, fn) {
+    fn = Maybe.bind(fn);
+    return fn(monad);
   }, m);
 };
 

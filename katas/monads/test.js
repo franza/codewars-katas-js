@@ -23,6 +23,12 @@ var just5Str = new Just('5');
 
 Test.expect(boundParseInt2(just5Str) instanceof Just === true, 'Function result should be a monad');
 Test.expect(boundParseInt2(new Nothing()) instanceof Nothing === true, 'Bound function that takes Nothing returns Nothing');
+try {
+  boundParseInt2(3);
+  Test.expect(false, 'Bound function should raise an error if arg is not a monad'); 
+} catch (e) {
+  Test.expect(true, 'Bound function should raise an error if arg is not a monad'); 
+}
 
 function parseInt3(x) {
   if (x == 3) {
